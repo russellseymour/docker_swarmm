@@ -1,4 +1,4 @@
-# docker-swarmm
+# docker_swarmm
 
 TODO: Enter one line description of the cookbook here.
 
