@@ -1,10 +1,10 @@
 ---
 driver:
-  name: hyperv
-  parent_vhd_folder: C:\VirtualMachines\Hyper-V
-  parent_vhd_name: ubuntu-16.04.vhdx
-  vm_switch: InternalSwitch
-  memory_startup_bytes: 2GB
+  name: docker
+  socket: npipe:////./pipe/docker_engine
+  publish_all: true
+  binary: docker.exe
+  use_sudo: false
 
 provisioner:
   name: chef_zero
@@ -12,7 +12,7 @@ provisioner:
 
 transport:
   name: ssh
-  password: P@ssw0rd!
+  password: kitchen
 
 verifier:
   name: inspec

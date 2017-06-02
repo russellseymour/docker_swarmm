@@ -1,4 +1,4 @@
-#
+
 # Cookbook Name:: docker-swarmm
 # Spec:: default
 #
