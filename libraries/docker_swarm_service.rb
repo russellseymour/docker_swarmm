@@ -35,7 +35,7 @@ module DockerSwarmCookbook
 
     # Property to pass the docker authentication to the service
     # This is to allow the use of a private registry
-    property :registry_auth, [TrueClass, FalseClass], false
+    property :registry_auth, [TrueClass, FalseClass], default: false
 
     # Set property that allows options to be passed to the image
     property :options, Array, default: []
