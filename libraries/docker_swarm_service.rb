@@ -33,6 +33,10 @@ module DockerSwarmCookbook
     # this will be a string array with the format <proto>,<hostport>,<containerport>
     property :endpoints, Array, default: []
 
+    # Property to pass the docker authentication to the service
+    # This is to allow the use of a private registry
+    property :registry_auth, [TrueClass, FalseClass], false
+
     # Set property that allows options to be passed to the image
     property :options, Array, default: []
 
@@ -87,6 +91,11 @@ module DockerSwarmCookbook
       # Add defaulted options
       cmd_parts << format("--replicas %s", replicas)
       cmd_parts << format('"%s"', image)
+
+      # Add the regsitry auth if it has been set
+      if registry_auth
+        cmd_parts << "--with-registry-auth"
+      end
 
       # If any options have been set add them to the command
       unless options.empty?
