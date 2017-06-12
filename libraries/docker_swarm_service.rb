@@ -93,9 +93,7 @@ module DockerSwarmCookbook
       cmd_parts << format('"%s"', image)
 
       # Add the regsitry auth if it has been set
-      if registry_auth
-        cmd_parts << "--with-registry-auth"
-      end
+      cmd_parts << "--with-registry-auth" if registry_auth
 
       # If any options have been set add them to the command
       unless options.empty?
