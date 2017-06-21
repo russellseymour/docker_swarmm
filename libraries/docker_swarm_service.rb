@@ -35,6 +35,9 @@ module DockerSwarmCookbook
     property :endpoints, Array, default: []
     property :endpoint_mode, String, default: "vip"
 
+    # Set how the service is to be created
+    property :mode, String, default: "replicated"
+
     # Property to pass the docker authentication to the service
     # This is to allow the use of a private registry
     property :registry_auth, [TrueClass, FalseClass], default: false
@@ -99,6 +102,7 @@ module DockerSwarmCookbook
       # Add defaulted options
       cmd_parts << format("--endpoint-mode %s", endpoint_mode)
       cmd_parts << format("--replicas %s", replicas)
+      cmd_parts << format("--mode %s", mode)
       cmd_parts << format('"%s"', image)
 
       # If any options have been set add them to the command
