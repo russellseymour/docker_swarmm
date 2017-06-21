@@ -33,6 +33,7 @@ module DockerSwarmCookbook
     # Set the property for accepting endpoints
     # this will be a string array with the format <proto>,<hostport>,<containerport>
     property :endpoints, Array, default: []
+    property :endpoint_mode, String, default: "vip"
 
     # Property to pass the docker authentication to the service
     # This is to allow the use of a private registry
@@ -96,6 +97,7 @@ module DockerSwarmCookbook
       cmd_parts << "--with-registry-auth" if registry_auth
 
       # Add defaulted options
+      cmd_parts << format("--endpoint-mode %s", endpoint_mode)
       cmd_parts << format("--replicas %s", replicas)
       cmd_parts << format('"%s"', image)
 
