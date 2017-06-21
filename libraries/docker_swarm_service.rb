@@ -28,6 +28,7 @@ module DockerSwarmCookbook
     property :parallelism, Integer, default: 1
     property :failure_action, String, default: "pause"
     property :labels, Array, default: []
+    property :hostname, String, default: ""
 
     # Set the property for accepting endpoints
     # this will be a string array with the format <proto>,<hostport>,<containerport>
@@ -59,6 +60,9 @@ module DockerSwarmCookbook
 
       # add a user if one has been specified
       cmd_parts << format("--user %s", user) unless user.empty?
+
+      # Set the hostname if it has been specified
+      cmd_parts << format("--hostname %s", hostname) unless hostname.empty?
 
       # add any environment variables
       unless environment_vars.empty?
