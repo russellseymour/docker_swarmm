@@ -104,8 +104,11 @@ module DockerSwarmCookbook
 
       # Add defaulted options
       cmd_parts << format("--endpoint-mode %s", endpoint_mode)
-      cmd_parts << format("--replicas %s", replicas)
       cmd_parts << format("--mode %s", mode)
+
+      # Only add replicas if the mode is set correctly
+      cmd_parts << format("--replicas %s", replicas) if mode == "replicated"
+
       cmd_parts << format('"%s"', image)
 
       # If a command has been specified, add it here
