@@ -42,6 +42,9 @@ module DockerSwarmCookbook
     # This is to allow the use of a private registry
     property :registry_auth, [TrueClass, FalseClass], default: false
 
+    # Specify what command should be run
+    property :command, String, default: ""
+
     # Set property that allows options to be passed to the image
     property :options, Array, default: []
 
@@ -104,6 +107,9 @@ module DockerSwarmCookbook
       cmd_parts << format("--replicas %s", replicas)
       cmd_parts << format("--mode %s", mode)
       cmd_parts << format('"%s"', image)
+
+      # If a command has been specified, add it here
+      cmd_parts << command unless command.empty?
 
       # If any options have been set add them to the command
       unless options.empty?
