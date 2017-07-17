@@ -2,7 +2,7 @@ require "mixlib/shellout"
 
 module DockerSwarmCookbook
   # Docker Master class to configure the manager node
-  class DockerSwarmMaster < DockerSwarmBase
+  class DockerSwarmWorker < DockerSwarmBase
     resource_name :docker_swarm_worker
 
     default_action :run
