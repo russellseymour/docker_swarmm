@@ -15,7 +15,7 @@ module DockerSwarmCookbook
     action :run do
       # Attempt to join the existing cluster
       execute "join swarm" do
-        command format("docker swarm join --token %s %s:%s", worker_token, manager_address, manager_port)
+        command format("docker swarm join --token %s %s:%s", new_resource.worker_token, new_resource.manager_address, new_resource.manager_port)
 
         not_if 'docker info 2>/dev/null | grep "Swarm: active"'
       end

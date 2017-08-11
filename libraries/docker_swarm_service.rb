@@ -51,72 +51,72 @@ module DockerSwarmCookbook
     action :create do
       # create an array that will be used to hold the whole command
       cmd_parts = ["docker service create"]
-      cmd_parts << format("--name %s", name)
+      cmd_parts << format("--name %s", new_resource.name)
 
       # iterate around the networks
-      networks.each do |network|
+      new_resource.networks.each do |network|
         cmd_parts << format("--network %s", network)
       end
 
       # iterate around the mounts
-      unless mounts.empty?
-        mounts.each do |mount|
+      unless new_resource.mounts.empty?
+        new_resource.mounts.each do |mount|
           cmd_parts << format('--mount "%s"', mount)
         end
       end
 
       # add a user if one has been specified
-      cmd_parts << format("--user %s", user) unless user.empty?
+      cmd_parts << format("--user %s", new_resource.user) unless new_resource.user.empty?
 
       # Set the hostname if it has been specified
-      cmd_parts << format("--hostname %s", hostname) unless hostname.empty?
+      cmd_parts << format("--hostname %s", new_resource.hostname) unless new_resource.hostname.empty?
 
       # add any environment variables
-      unless environment_vars.empty?
-        environment_vars.each do |env_var|
+      unless new_resource.environment_vars.empty?
+        new_resource.environment_vars.each do |env_var|
           cmd_parts << format("--env %s", env_var)
         end
       end
 
       # add contsraints
-      unless constraints.empty?
-        constraints.each do |constraint|
+      unless new_resource.constraints.empty?
+        new_resource.constraints.each do |constraint|
           cmd_parts << format("--constraint '%s'", constraint)
         end
       end
 
       # add labels for the container
-      unless labels.empty?
-        labels.each do |label|
+      unless new_resource.labels.empty?
+        new_resource.labels.each do |label|
           cmd_parts << format("--label '%s'", label)
         end
       end
 
       # add publish ports
-      unless endpoints.empty?
-        endpoints.each do |endpoint|
+      unless new_resource.endpoints.empty?
+        new_resource.endpoints.each do |endpoint|
           cmd_parts << format("--publish %s", endpoint)
         end
       end
 
       # Add the regsitry auth if it has been set
-      cmd_parts << "--with-registry-auth" if registry_auth
+      cmd_parts << "--with-registry-auth" if new_resource.registry_auth
 
       # Add defaulted options
-      cmd_parts << format("--endpoint-mode %s", endpoint_mode)
-      cmd_parts << format("--mode %s", mode)
+      cmd_parts << format("--endpoint-mode %s", new_resource.endpoint_mode)
+      cmd_parts << format("--mode %s", new_resource.mode)
 
       # Only add replicas if the mode is set correctly
-      cmd_parts << format("--replicas %s", replicas) if mode == "replicated"
+      cmd_parts << format("--replicas %s", new_resource.replicas) if new_resource.mode == "replicated"
 
-      cmd_parts << format('"%s"', image)
+      cmd_parts << format('"%s"', new_resource.image)
 
       # If a command has been specified, add it here
-      cmd_parts << command unless command.empty?
+      cmd_parts << new_resource.command unless new_resource.command.empty?
 
       # If any options have been set add them to the command
-      unless options.empty?
-        options.each do |option|
+      unless new_resource.options.empty?
+        new_resource.options.each do |option|
           cmd_parts << option
         end
       end
@@ -124,9 +124,9 @@ module DockerSwarmCookbook
       # join the cmd_parts
       cmd = cmd_parts.join(" ")
 
-      guard = format('docker service ls --format "{{.Name}}" | grep %s', name)
+      guard = format('docker service ls --format "{{.Name}}" | grep %s', new_resource.name)
 
-      execute "create service #{name}" do
+      execute "create service #{new_resource.name}" do
         command cmd
 
         not_if guard

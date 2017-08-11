@@ -13,9 +13,9 @@ module DockerSwarmCookbook
     action :create do
       # attempt to create the named network
       execute "create docker network" do
-        command format("docker network create --driver overlay %s", network_name)
+        command format("docker network create --driver overlay %s", new_resource.network_name)
 
-        not_if format('docker network ls --format "{{.Name}}" | grep %s', network_name)
+        not_if format('docker network ls --format "{{.Name}}" | grep %s', new_resource.network_name)
       end
     end
   end
