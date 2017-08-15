@@ -38,9 +38,10 @@ module DockerSwarmCookbook
     # Set how the service is to be created
     property :mode, String, default: "replicated"
 
-    # Property to pass the docker authentication to the service
-    # This is to allow the use of a private registry
-    property :registry_auth, [TrueClass, FalseClass], default: false
+    # Allow username and password to perform a login first and then user
+    # the --with-registry-auth flag on the main service command
+    property :username, String, default: ""
+    property :password, String, default: ""
 
     # Specify what command should be run
     property :command, String, default: ""
@@ -49,8 +50,23 @@ module DockerSwarmCookbook
     property :options, Array, default: []
 
     action :create do
+
+      # Create the array of commands
+      cmd_parts = []
+
+      # If the username and password have been set then perform a login
+      # to the specified registry image
+      registry_auth = false
+      unless new_resource.username.empty? && new_resource.password.empty?
+        
+        # Determine the registry url
+        registry_url = format("https://%s", new_resource.image.split(/\//)[0])
+        cmd_parts << format("docker login -u %s -p %s %s; ", new_resource.username, new_resource.password, registry_url)
+        registry_auth = true
+      end
+
       # create an array that will be used to hold the whole command
-      cmd_parts = ["docker service create"]
+      cmd_parts << "docker service create"
       cmd_parts << format("--name %s", new_resource.name)
 
       # iterate around the networks
@@ -100,7 +116,7 @@ module DockerSwarmCookbook
       end
 
       # Add the regsitry auth if it has been set
-      cmd_parts << "--with-registry-auth" if new_resource.registry_auth
+      cmd_parts << "--with-registry-auth" if registry_auth
 
       # Add defaulted options
       cmd_parts << format("--endpoint-mode %s", new_resource.endpoint_mode)
