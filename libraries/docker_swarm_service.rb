@@ -151,7 +151,7 @@ module DockerSwarmCookbook
 
         unless new_resource.dns_search.empty?
           new_resource.dns_search.each do |dns_search|
-            cmd_parts << format("--dn-searchs %s", dns_search)
+            cmd_parts << format("--dns-search %s", dns_search)
           end
         end
 

@@ -5,7 +5,7 @@ maintainer_email "russell.seymour@turtlesystems.co.uk"
 license "All rights reserved"
 description "Installs/Configures docker-swarmm"
 long_description "Installs/Configures docker-swarmm"
-version "0.2.3"
+version "0.2.4"
 
 chef_version ">= 12.5" if respond_to?(:chef_version)
 
